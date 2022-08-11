@@ -1,6 +1,7 @@
 package com.example.notes.screens
 
 import android.app.Application
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -29,12 +29,9 @@ import com.example.notes.model.Note
 import com.example.notes.navigate.NavRoute
 
 @Composable
-fun MainScreen(navController: NavHostController) {
-    val context = LocalContext.current
-    val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-    //val notes = mViewModel.dataTest.observeAsState(listOf()).value
-   
+fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
+   val notes = viewModel.readAllNotes().observeAsState(listOf()).value
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -50,20 +47,26 @@ fun MainScreen(navController: NavHostController) {
             }
         }
     ){
-//            LazyColumn() {
-//                items(notes) { note ->
-//                    NoteItem(note = note)
-//                }
-//            }
+        LazyColumn() {
+            items(notes) { note ->
+                NoteItem(note = note, navController = navController)
+            }
+        }
     }
 }
+
 @Composable
-fun NoteItem(note: Note) {
+fun NoteItem(note: Note, navController: NavHostController) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(top = 16.dp)) {
+        .padding(16.dp)
+        .clickable {
+            navController.navigate(NavRoute.NoteScreen.route)
+        }) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -81,5 +84,8 @@ fun NoteItem(note: Note) {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(navController = rememberNavController())
+    val context = LocalContext.current
+    val mViewModel: MainViewModel =
+        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    MainScreen(navController = rememberNavController(), viewModel = mViewModel)
 }

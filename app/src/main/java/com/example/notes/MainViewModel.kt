@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.notes.database.DatabaseRepository
 import com.example.notes.database.room.dao.AppRoomDatabase
 import com.example.notes.database.room.repository.RoomRepository
@@ -11,6 +12,8 @@ import com.example.notes.model.Note
 import com.example.notes.utils.REPOSITORY
 import com.example.notes.utils.TYPE_FIREBASE
 import com.example.notes.utils.TYPE_ROOM
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -38,4 +41,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
     }
+
+    fun addNote(note: Note, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.create(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun readAllNotes() = REPOSITORY.readAll
 }

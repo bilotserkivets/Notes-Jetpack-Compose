@@ -22,19 +22,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.notes.MainViewModel
 import com.example.notes.MainViewModelFactory
+import com.example.notes.model.Note
 import com.example.notes.navigate.NavRoute
 
 @Composable
-fun AddScreen (navController: NavHostController) {
-    val context = LocalContext.current
-    val mViewModel: MainViewModel =
-        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
-
+fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
     var title by remember {
         mutableStateOf("")
     }
     var subtitle by remember {
         mutableStateOf("")
+    }
+    var isButtonEnabled by remember {
+        mutableStateOf(false)
     }
 
     Scaffold() {
@@ -52,25 +52,33 @@ fun AddScreen (navController: NavHostController) {
                 )
                 OutlinedTextField(
                     value = title,
+                    isError = title.isEmpty(),
                     label = {
                         Text(text = "Write title")
                     },
                     onValueChange = {
                         title = it
+                        isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                     }
                 )
                 OutlinedTextField(
                     value = subtitle,
+                    isError = subtitle.isEmpty(),
                     label = {
                         Text(text = "Write subtitle")
                     },
                     onValueChange = {
                         subtitle = it
+                        isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
                     }
                 )
                 Button(
+                    modifier = Modifier.padding(top = 16.dp),
+                    enabled = isButtonEnabled,
                     onClick = {
-                    navController.navigate(NavRoute.MainScreen.route)
+                        viewModel.addNote(note = Note(title = title, subtitle = subtitle)) {
+                            navController.navigate(NavRoute.MainScreen.route)
+                        }
                     }
                 ) {
                     Text(text = "Add note")
@@ -84,5 +92,8 @@ fun AddScreen (navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun AddScreenPreview() {
-    AddScreen(navController = rememberNavController())
+    val context = LocalContext.current
+    val mViewModel: MainViewModel =
+        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    AddScreen(navController = rememberNavController(), viewModel = mViewModel)
 }

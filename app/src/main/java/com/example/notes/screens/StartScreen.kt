@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.SemanticsProperties.Text
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +26,7 @@ import com.example.notes.utils.TYPE_FIREBASE
 import com.example.notes.utils.TYPE_ROOM
 
 @Composable
-fun StartScreen (navController: NavHostController) {
+fun StartScreen (navController: NavHostController, viewModel: MainViewModel) {
     val context = LocalContext.current
     val mViewModel: MainViewModel =
         viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
@@ -71,5 +70,8 @@ fun StartScreen (navController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 fun StartScreenPreview() {
-    StartScreen(navController = rememberNavController())
+    val context = LocalContext.current
+    val mViewModel: MainViewModel =
+        viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+    StartScreen(navController = rememberNavController(), viewModel = mViewModel)
 }
