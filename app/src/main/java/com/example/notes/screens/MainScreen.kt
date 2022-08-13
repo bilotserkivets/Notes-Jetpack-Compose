@@ -27,6 +27,7 @@ import com.example.notes.MainViewModel
 import com.example.notes.MainViewModelFactory
 import com.example.notes.model.Note
 import com.example.notes.navigate.NavRoute
+import com.example.notes.utils.Constants
 
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -41,7 +42,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                 backgroundColor = Color.Blue) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = "Add notes",
+                    contentDescription = Constants.Keys.ADD_NOTE,
                     tint = Color.White
                 )
             }
@@ -61,7 +62,7 @@ fun NoteItem(note: Note, navController: NavHostController) {
         .fillMaxWidth()
         .padding(16.dp)
         .clickable {
-            navController.navigate(NavRoute.NoteScreen.route)
+            navController.navigate(NavRoute.NoteScreen.route + "/${note.id}")
         }) {
         Column(
             modifier = Modifier

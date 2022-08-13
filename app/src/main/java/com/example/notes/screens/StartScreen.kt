@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.notes.MainViewModel
 import com.example.notes.MainViewModelFactory
 import com.example.notes.navigate.NavRoute
+import com.example.notes.utils.Constants
 import com.example.notes.utils.TYPE_FIREBASE
 import com.example.notes.utils.TYPE_ROOM
 
@@ -38,7 +39,7 @@ fun StartScreen (navController: NavHostController, viewModel: MainViewModel) {
             verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "What will you choose?",
+                    text = Constants.Keys.WHAT_WILL_YOU_CHOOSE,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -50,7 +51,7 @@ fun StartScreen (navController: NavHostController, viewModel: MainViewModel) {
                 },
                 modifier = Modifier.width(200.dp)
                 ) {
-                Text(text = "Room database")
+                Text(text = Constants.Keys.ROOM_DATABASE)
             }
             Button(
                 onClick = {
@@ -60,10 +61,9 @@ fun StartScreen (navController: NavHostController, viewModel: MainViewModel) {
                 },
                 modifier = Modifier.width(200.dp)
             ) {
-                Text(text = "Firebase database")
+                Text(text = Constants.Keys.FIREBASE_DATABASE)
             }
         }
-
     }
 }
 

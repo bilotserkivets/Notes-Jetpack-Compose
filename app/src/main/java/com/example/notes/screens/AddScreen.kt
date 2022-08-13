@@ -24,6 +24,7 @@ import com.example.notes.MainViewModel
 import com.example.notes.MainViewModelFactory
 import com.example.notes.model.Note
 import com.example.notes.navigate.NavRoute
+import com.example.notes.utils.Constants
 
 @Composable
 fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
@@ -46,7 +47,7 @@ fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                 Text(
-                    text = "Add your note",
+                    text = Constants.Keys.ADD_NEW_NOTE,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
                 )
@@ -54,7 +55,7 @@ fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
                     value = title,
                     isError = title.isEmpty(),
                     label = {
-                        Text(text = "Write title")
+                        Text(text = Constants.Keys.NOTE_TITLE)
                     },
                     onValueChange = {
                         title = it
@@ -65,7 +66,7 @@ fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
                     value = subtitle,
                     isError = subtitle.isEmpty(),
                     label = {
-                        Text(text = "Write subtitle")
+                        Text(text = Constants.Keys.NOTE_SUBTITLE)
                     },
                     onValueChange = {
                         subtitle = it
@@ -81,7 +82,7 @@ fun AddScreen (navController: NavHostController, viewModel: MainViewModel) {
                         }
                     }
                 ) {
-                    Text(text = "Add note")
+                    Text(text = Constants.Keys.ADD_NOTE)
                 }
             }
         }

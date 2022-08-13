@@ -9,6 +9,7 @@ import com.example.notes.screens.AddScreen
 import com.example.notes.screens.MainScreen
 import com.example.notes.screens.NoteScreen
 import com.example.notes.screens.StartScreen
+import com.example.notes.utils.Constants
 
 @Composable
 fun NotesNavHost(mViewModel: MainViewModel) {
@@ -24,8 +25,8 @@ fun NotesNavHost(mViewModel: MainViewModel) {
         composable(NavRoute.AddScreen.route) {
             AddScreen(navController, viewModel = mViewModel)
         }
-        composable(NavRoute.NoteScreen.route) {
-            NoteScreen(navController, viewModel = mViewModel)
+        composable(NavRoute.NoteScreen.route + "/{${Constants.Keys.ID}}") { backStack ->
+            NoteScreen(navController, viewModel = mViewModel, noteId = backStack.arguments?.getString(Constants.Keys.ID))
         }
     }
 }

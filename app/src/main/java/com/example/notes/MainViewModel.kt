@@ -19,16 +19,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val context = application
 
-    val dataTest: MutableLiveData<List<Note>> by lazy {
-        MutableLiveData<List<Note>>()
-    }
-    val dbType: MutableLiveData<String> by lazy {
-        MutableLiveData<String>(TYPE_ROOM)
-    }
+//    val dataTest: MutableLiveData<List<Note>> by lazy {
+//        MutableLiveData<List<Note>>()
+//    }
+//    val dbType: MutableLiveData<String> by lazy {
+//        MutableLiveData<String>(TYPE_ROOM)
+//    }
 
     fun initDatabase(type: String, onSuccess: () -> Unit) {
-        Log.d("checkDatabase", "initDatabase $type")
-        dbType.value = type
 
         val dao = AppRoomDatabase.getInstance(context).getRoomDao()
 
@@ -38,8 +36,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 onSuccess()
             }
         }
-
-
     }
 
     fun addNote(note: Note, onSuccess: () -> Unit) {
@@ -53,4 +49,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun readAllNotes() = REPOSITORY.readAll
+
+    fun deleteNote(note: Note, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.delete(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+    }
+
+    fun updateNote(note: Note, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            REPOSITORY.update(note = note) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    onSuccess()
+                }
+            }
+        }
+
+    }
 }
